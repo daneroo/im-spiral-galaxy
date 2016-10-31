@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:odm="http://product.corel.com/CGS/11/cddns/" xml:space="preserve" width="1024px" height="640px" style="shape-rendering:geometricPrecision; image-rendering:optimizeQuality"
+     viewBox="0 0 1024 640">
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="500" ry="312.5" transform="rotate(0,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="458.33" ry="286.46" transform="rotate(10,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="416.67" ry="260.42" transform="rotate(20,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="375" ry="234.375" transform="rotate(30,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="333.33" ry="208.33" transform="rotate(40,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="291.67" ry="182.29" transform="rotate(50,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="250" ry="156.25" transform="rotate(60,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="208.33" ry="130.21" transform="rotate(70,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="166.67" ry="104.17" transform="rotate(80,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="125" ry="78.125" transform="rotate(90,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="83.33" ry="52.083" transform="rotate(100,512,320)"/>
+<ellipse style="stroke-width:5;fill:none;stroke:#000000" cx="512" cy="320" rx="41.67" ry="26.042" transform="rotate(110,512,320)"/>
+</svg>
