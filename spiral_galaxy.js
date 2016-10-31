@@ -54,7 +54,7 @@ var stars = svg.append('g')
   .attr("class", "stars")
   .attr("transform", "scale(320)");
 
-var numStars = 200
+var numStars = 500
 var eachStar = stars.selectAll('.star')
   .data(d3.range(numStars))
   .enter()
