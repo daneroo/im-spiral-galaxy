@@ -3,7 +3,8 @@ var svg = d3.select("body").append("svg")
   .attr("width", window.innerWidth)
   .attr("height", window.innerHeight)
   // setting viewBox implies preserveAspectRatio: xMidYMid meet?
-  .attr('viewBox', '-320 -200 640 400')
+  // .attr('viewBox', '-320 -200 640 400')
+  .attr('viewBox', '-330 -210 660 420') // a little padding
 
 var orbits = svg.append('g')
   .attr("class", "orbits")
@@ -12,7 +13,7 @@ var orbits = svg.append('g')
 // Model definitions - for orbits
 var outerRadius = 1
 var orbitSteps = 20
-var totalAngularSkew = 150
+var totalAngularSkew = 180
 var majorMinorAxisRatio = 1.6
 
 // Elliptical Orbits
@@ -40,7 +41,7 @@ orbits.selectAll('ellipse')
   .style({
     fill: 'none',
     'stroke-width': .01,
-    opacity: .1,
+    opacity: .05,
     // stroke: d3.scale.category20c(),
     stroke: function (d) {
       if (d.r > .45 && d.r < .55) return 'yellow'
@@ -86,12 +87,26 @@ eachStar
       return .002 / d.orbit.scale
     }
   })
-  .style("fill", 'yellow')
+  .style("fill", function () {
+    var OBAFGKM = [
+      ['O', 155, 176, 255, '#9bb0ff'],
+      ['B', 170, 191, 255, '#aabfff'],
+      ['A', 202, 215, 255, '#cad7ff'],
+      ['F', 248, 247, 255, '#f8f7ff'],
+      ['G', 255, 244, 234, '#fff4ea'],
+      ['K', 255, 210, 161, '#ffd2a1'],
+      ['M', 255, 204, 111, '#ffcc6f']
+    ]
+    return OBAFGKM[Math.floor(Math.random()*OBAFGKM.length)][4]
+  })
 
 d3.timer(function () {
   eachStar.attr({
     transform: function (d) {
-      d.angle -= .3
+      // d.angle -= 0.3
+      // d.angle -= (1 - (d.orbit.scale))
+      // from s=1->.3 to  s=0->1
+      d.angle -= (1 - (.7 * d.orbit.scale))
       return 'rotate(' + d.orbit.angle + ')scale(' + d.orbit.scale + ',' + d.orbit.scale / majorMinorAxisRatio + ')rotate(' + d.angle + ')';
     }
 
