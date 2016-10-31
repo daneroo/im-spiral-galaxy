@@ -54,7 +54,7 @@ var stars = svg.append('g')
   .attr("class", "stars")
   .attr("transform", "scale(320)");
 
-var numStars = 500
+var numStars = 200
 var eachStar = stars.selectAll('.star')
   .data(d3.range(numStars))
   .enter()
@@ -87,7 +87,7 @@ var OBAFGKM = [
   ['K', 255, 210, 161, '#ffd2a1'],
   ['M', 255, 204, 111, '#ffcc6f']
 ]
-for (var perOrbit = 0; perOrbit < 10; perOrbit++) {
+for (var perOrbit = 0; perOrbit < 20; perOrbit++) {
   var theta = Math.random() * 360;
   var wobble = 1 + Math.random() * .1
   eachStar
