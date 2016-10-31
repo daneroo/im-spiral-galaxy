@@ -1,13 +1,9 @@
 
-count = 0;
-
 var svg = d3.select("body").append("svg")
   .attr("width", window.innerWidth)
   .attr("height", window.innerHeight)
   // setting viewBox implies preserveAspectRatio: xMidYMid meet?
-  .attr('viewBox', '-320 -220 640 480')
-// resize once at begining
-resize()
+  .attr('viewBox', '-320 -200 640 400')
 
 var orbits = svg.append('g')
   .attr("class", "orbits")
@@ -15,70 +11,99 @@ var orbits = svg.append('g')
 
 // Model definitions - for orbits
 var outerRadius = 1
-var orbitSteps = 30
+var orbitSteps = 20
 var totalAngularSkew = 150
 var majorMinorAxisRatio = 1.6
 
 // Elliptical Orbits
-var g = orbits.selectAll("g")
+orbits.selectAll('ellipse')
   .data(d3.range(outerRadius, 0, -outerRadius / orbitSteps))
-  .enter().append("g")
-
-g.append("ellipse")
+  .enter()
+  .append("ellipse")
+  .datum(function (r) {
+    // r radius: goes from 1..0 in orbitSteps
+    // console.log('datum: r', r)
+    return {
+      r: r,
+      angle: (r / outerRadius - 1) * totalAngularSkew,
+      scale: r
+    };
+  })
   .attr({
     cx: 0, cy: 0,
-    rx: function (r) { return r },
-    ry: function (r) { return r / majorMinorAxisRatio },
-    transform: function (r) {
-      console.log('append: r', r)
-      var rot = (r / outerRadius - 1) * totalAngularSkew
-      var scale = r
-      return 'rotate(' + rot + ')scale(' + scale + ')';
-
+    rx: 1,
+    ry: 1 / majorMinorAxisRatio,
+    transform: function (d) {
+      return 'rotate(' + d.angle + ')scale(' + d.scale + ')';
     }
   })
   .style({
     fill: 'none',
     'stroke-width': .01,
-    opacity: .7,
+    opacity: .1,
     // stroke: d3.scale.category20c(),
-    stroke: function (r) {
-      if (r > .45 && r < .55) return 'yellow'
-      // return d3.rgb(200, 200, 200)
+    stroke: function (d) {
+      if (d.r > .45 && d.r < .55) return 'yellow'
       return 'white'
     }
   })
 
-g.datum(function (d, i) {
-  // console.log('datum: d,i', d, i)
-  return { d: d, angle: 0 };
-});
 
-// svg.on("mousemove", function () {
-//   mouse = d3.mouse(this);
-// });
+var stars = svg.append('g')
+  .attr("class", "stars")
+  .attr("transform", "scale(320)");
 
-d3.timer(function () {
-  count++;
-  g.attr("transform", function (d, i) {
-    var z = d.d / 10
-    // d.angle += 1;
-    // d.angle -= (1 - (z)) / 1;
-    // console.log('time: d', d)
-    return 'rotate(' + d.angle + ')';
-  });
-});
+var numStars = 5000
+var eachStar = stars.selectAll('.star')
+  .data(d3.range(numStars))
+  .enter()
+  .append("g")
+  .datum(function () {
+    r = Math.random() // select orbit
+    r = r * r * r // skew to smaller orbits
+    return {
+      angle: Math.random() * 360,
+      orbit: {
+        r: r,
+        angle: (r / outerRadius - 1) * totalAngularSkew,
+        scale: r
+      }
+    };
+  })
+  .attr({
+    class: 'star',
+    transform: function (d) {
+      return 'rotate(' + d.orbit.angle + ')scale(' + d.orbit.scale + ',' + d.orbit.scale / majorMinorAxisRatio + ')rotate(' + d.angle + ')';
+    }
+  })
 
-var numDots = 10
-svg.selectAll('.dot')
-  .data(d3.range(numDots))
-  .enter().append("circle")
-  .attr("class", "dot")
-  .attr("r", 1)
-  .attr("cx", (d) => 300 * d / numDots)
-  // .attr("cy", (d) => 0 * (d - 2))
+eachStar
+  .append("circle")
+  .attr({
+    cx: 1,
+    cy: 0,
+    r: function (d) {
+      return .002 / d.orbit.scale
+    }
+  })
   .style("fill", 'yellow')
 
+d3.timer(function () {
+  eachStar.attr({
+    transform: function (d) {
+      d.angle -= .3
+      return 'rotate(' + d.orbit.angle + ')scale(' + d.orbit.scale + ',' + d.orbit.scale / majorMinorAxisRatio + ')rotate(' + d.angle + ')';
+    }
+
+  })
+  // orbits.selectAll('ellipse')
+  //   .attr("transform", function (d) {
+  //     // d.angle += 1; // constant rotation
+  //     d.angle -= (1 - (d.r)); // process inner orbits more (outer (r==1) is fixed)
+  //     console.log('time: d', d)
+  //     return 'rotate(' + d.angle + ')scale(' + d.scale + ')';
+  //   });
+});
 
 // FullScreen
 window.addEventListener('resize', resize);
