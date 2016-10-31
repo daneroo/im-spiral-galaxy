@@ -1,31 +1,38 @@
-var mouse = [480, 250],
-  count = 0;
+
+count = 0;
 
 var svg = d3.select("body").append("svg")
-  .attr("width", 960)
-  .attr("height", 500);
+  .attr("width", window.innerWidth)
+  .attr("height", window.innerHeight)
+  // setting viewBox implies preserveAspectRatio: xMidYMid meet?
+  .attr('viewBox', '-320 -220 640 480')
+// resize once at begining
+resize()
 
-// Model defsinitions
+var orbits = svg.append('g')
+  .attr("class", "orbits")
+  .attr("transform", "scale(320)");
+
+// Model definitions - for orbits
 var outerRadius = 1
-var orbitSteps = 20
-var totalAngularSkew = -150
+var orbitSteps = 30
+var totalAngularSkew = 150
 var majorMinorAxisRatio = 1.6
 
 // Elliptical Orbits
-var g = svg.selectAll("g")
+var g = orbits.selectAll("g")
   .data(d3.range(outerRadius, 0, -outerRadius / orbitSteps))
   .enter().append("g")
-  .attr("transform", "translate(" + mouse + ")");
 
 g.append("ellipse")
   .attr({
     cx: 0, cy: 0,
-    rx: function (r) { return r * majorMinorAxisRatio },
-    ry: function (r) { return r },
+    rx: function (r) { return r },
+    ry: function (r) { return r / majorMinorAxisRatio },
     transform: function (r) {
       console.log('append: r', r)
       var rot = (r / outerRadius - 1) * totalAngularSkew
-      var scale = r * 200
+      var scale = r
       return 'rotate(' + rot + ')scale(' + scale + ')';
 
     }
@@ -41,14 +48,9 @@ g.append("ellipse")
       return 'white'
     }
   })
-  // .style("fill", d3.scale.category20c());
-  // .style("stroke", d3.scale.category20c())
-  // .style("stroke", d3.rgb(200, 200, 200))
-  .style()
 
 g.datum(function (d, i) {
   // console.log('datum: d,i', d, i)
-  // return { center: mouse.slice(), angle: 0 };
   return { d: d, angle: 0 };
 });
 
@@ -63,7 +65,7 @@ d3.timer(function () {
     // d.angle += 1;
     // d.angle -= (1 - (z)) / 1;
     // console.log('time: d', d)
-    return 'translate(480,250)rotate(' + d.angle + ')';
+    return 'rotate(' + d.angle + ')';
   });
 });
 
@@ -71,9 +73,21 @@ var numDots = 10
 svg.selectAll('.dot')
   .data(d3.range(numDots))
   .enter().append("circle")
-  .attr("transform", "translate(" + mouse + ")")
   .attr("class", "dot")
   .attr("r", 1)
   .attr("cx", (d) => 300 * d / numDots)
   // .attr("cy", (d) => 0 * (d - 2))
-  .style("fill", 'yellow') 
+  .style("fill", 'yellow')
+
+
+// FullScreen
+window.addEventListener('resize', resize);
+function resize() {
+  var sz = {
+    width: window.innerWidth,
+    height: window.innerHeight
+  }
+  // console.log('screen:', sz)
+  // update the global svg element
+  svg.attr(sz);
+}
