@@ -13,7 +13,7 @@ var orbits = svg.append('g')
 // Model definitions - for orbits
 var outerRadius = 1
 var orbitSteps = 20
-var totalAngularSkew = 180
+var totalAngularSkew = 150
 var majorMinorAxisRatio = 1.6
 
 // Elliptical Orbits
@@ -40,11 +40,11 @@ orbits.selectAll('ellipse')
   })
   .style({
     fill: 'none',
-    'stroke-width': .01,
-    opacity: .05,
+    'stroke-width': (d) => .002 / d.scale, //un-scale
+    opacity: .1,
     // stroke: d3.scale.category20c(),
     stroke: function (d) {
-      if (d.r > .45 && d.r < .55) return 'yellow'
+      if (d.r > .75 && d.r < .85) return 'yellow'
       return 'white'
     }
   })
@@ -89,14 +89,14 @@ var OBAFGKM = [
 ]
 for (var perOrbit = 0; perOrbit < 20; perOrbit++) {
   var theta = Math.random() * 360;
-  var wobble = 1 + Math.random() * .1
+  var wobble = 1 - 0.05 + Math.random() * 0.10 // 1+/-0.05*r()
   eachStar
     .append("circle")
     .attr({
       cx: wobble * Math.cos(theta),
       cy: wobble * Math.sin(theta),
       r: function (d) {
-        return .002 / d.orbit.scale
+        return .002 / d.orbit.scale // un-scale
       }
     })
     .style("fill", function () {
