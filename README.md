@@ -1,5 +1,10 @@
 # Spiral Galaxy Simulation - Using Desity Wave Theory
 
+## TODO
+
+- Accelerate by placing all stars in a orbital bin together?
+- Color distribution ?
+
 ## References
 [Wikipedia - Desity Wave Theory](https://en.wikipedia.org/wiki/Density_wave_theory)
 [Rendering with Desity Wave Theory](http://beltoforion.de/article.php?a=spiral_galaxy_renderer&hl=en&p=compiling&s=idLinks#idLinks)
