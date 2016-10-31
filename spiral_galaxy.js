@@ -54,7 +54,7 @@ var stars = svg.append('g')
   .attr("class", "stars")
   .attr("transform", "scale(320)");
 
-var numStars = 5000
+var numStars = 500
 var eachStar = stars.selectAll('.star')
   .data(d3.range(numStars))
   .enter()
@@ -76,29 +76,33 @@ var eachStar = stars.selectAll('.star')
     transform: function (d) {
       return 'rotate(' + d.orbit.angle + ')scale(' + d.orbit.scale + ',' + d.orbit.scale / majorMinorAxisRatio + ')rotate(' + d.angle + ')';
     }
-  })
+  });
 
-eachStar
-  .append("circle")
-  .attr({
-    cx: 1,
-    cy: 0,
-    r: function (d) {
-      return .002 / d.orbit.scale
-    }
-  })
-  .style("fill", function () {
-    var OBAFGKM = [
-      ['O', 155, 176, 255, '#9bb0ff'],
-      ['B', 170, 191, 255, '#aabfff'],
-      ['A', 202, 215, 255, '#cad7ff'],
-      ['F', 248, 247, 255, '#f8f7ff'],
-      ['G', 255, 244, 234, '#fff4ea'],
-      ['K', 255, 210, 161, '#ffd2a1'],
-      ['M', 255, 204, 111, '#ffcc6f']
-    ]
-    return OBAFGKM[Math.floor(Math.random()*OBAFGKM.length)][4]
-  })
+var OBAFGKM = [
+  ['O', 155, 176, 255, '#9bb0ff'],
+  ['B', 170, 191, 255, '#aabfff'],
+  ['A', 202, 215, 255, '#cad7ff'],
+  ['F', 248, 247, 255, '#f8f7ff'],
+  ['G', 255, 244, 234, '#fff4ea'],
+  ['K', 255, 210, 161, '#ffd2a1'],
+  ['M', 255, 204, 111, '#ffcc6f']
+]
+for (var perOrbit = 0; perOrbit < 10; perOrbit++) {
+  var theta = Math.random() * 360;
+  var wobble = 1 + Math.random() * .1
+  eachStar
+    .append("circle")
+    .attr({
+      cx: wobble * Math.cos(theta),
+      cy: wobble * Math.sin(theta),
+      r: function (d) {
+        return .002 / d.orbit.scale
+      }
+    })
+    .style("fill", function () {
+      return OBAFGKM[Math.floor(Math.random() * OBAFGKM.length)][4]
+    })
+}
 
 d3.timer(function () {
   eachStar.attr({
