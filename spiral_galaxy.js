@@ -1,4 +1,6 @@
 
+var md = new MobileDetect(window.navigator.userAgent);
+
 var svg = d3.select("body").append("svg")
   .attr("width", window.innerWidth)
   .attr("height", window.innerHeight)
@@ -8,13 +10,22 @@ var svg = d3.select("body").append("svg")
 
 var orbits = svg.append('g')
   .attr("class", "orbits")
+  .style('opacity', .5)
   .attr("transform", "scale(320)");
 
-// Model definitions - for orbits
+// Model definitions - for elliptical orbits
 var outerRadius = 1
 var orbitSteps = 20
 var totalAngularSkew = 150
 var majorMinorAxisRatio = 1.6
+
+// Model definitions - for stars
+var numStarOrbits = 500
+var starsPerOrbit = 20
+if (md.mobile()) {
+  numStarOrbits = 200
+  starsPerOrbit = 10
+}
 
 // Elliptical Orbits
 orbits.selectAll('ellipse')
@@ -41,7 +52,6 @@ orbits.selectAll('ellipse')
   .style({
     fill: 'none',
     'stroke-width': (d) => .002 / d.scale, //un-scale
-    opacity: .1,
     // stroke: d3.scale.category20c(),
     stroke: function (d) {
       if (d.r > .75 && d.r < .85) return 'yellow'
@@ -52,11 +62,11 @@ orbits.selectAll('ellipse')
 
 var stars = svg.append('g')
   .attr("class", "stars")
+  .style('opacity', 1)
   .attr("transform", "scale(320)");
 
-var numStars = 500
 var eachStar = stars.selectAll('.star')
-  .data(d3.range(numStars))
+  .data(d3.range(numStarOrbits))
   .enter()
   .append("g")
   .datum(function () {
@@ -78,6 +88,7 @@ var eachStar = stars.selectAll('.star')
     }
   });
 
+// star colors
 var OBAFGKM = [
   ['O', 155, 176, 255, '#9bb0ff'],
   ['B', 170, 191, 255, '#aabfff'],
@@ -87,7 +98,7 @@ var OBAFGKM = [
   ['K', 255, 210, 161, '#ffd2a1'],
   ['M', 255, 204, 111, '#ffcc6f']
 ]
-for (var perOrbit = 0; perOrbit < 20; perOrbit++) {
+for (var perOrbit = 0; perOrbit < starsPerOrbit; perOrbit++) {
   var theta = Math.random() * 360;
   var wobble = 1 - 0.05 + Math.random() * 0.10 // 1+/-0.05*r()
   eachStar
@@ -115,6 +126,7 @@ d3.timer(function () {
     }
 
   })
+  // procession of the elipses
   // orbits.selectAll('ellipse')
   //   .attr("transform", function (d) {
   //     // d.angle += 1; // constant rotation
@@ -135,3 +147,19 @@ function resize() {
   // update the global svg element
   svg.attr(sz);
 }
+
+// Button curried handler
+function toggler(what) {
+  return function (event) {
+    var current = what.style('opacity')
+    var tr = { 1: .5, .5: 0, 0: 1 }
+    var next = tr[current];
+    what.style('opacity', next)
+  }
+}
+d3.select('#orbits')
+  .on('click', toggler(orbits))
+d3.select('#stars')
+  .on('click', toggler(stars))
+
+d3.select('.legend span').text('' + (numStarOrbits * starsPerOrbit) + ' stars')
